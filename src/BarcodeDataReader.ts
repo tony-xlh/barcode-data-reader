@@ -33,20 +33,23 @@ export class BarcodeDataReader{
     return results;
   }
 
-
-  private readAlphaNumericBarcodes(_barcodes:Barcode[]):ReadingResult[]{
-    return [];
+  private readAlphaNumericBarcodes(barcodes:Barcode[]):ReadingResult[]{
+    return this.decodeText(barcodes,"ASCII");
   }
 
-  private readNumericBarcodes(_barcodes:Barcode[]):ReadingResult[]{
-    return [];
+  private readNumericBarcodes(barcodes:Barcode[]):ReadingResult[]{
+    return this.decodeText(barcodes,"ASCII");
   }
 
   private readKanjiBarcodes(barcodes:Barcode[]):ReadingResult[]{
+    return this.decodeText(barcodes,"SHIFT-JIS");
+  }
+
+  private decodeText(barcodes:Barcode[],encoding:string){
     let results:ReadingResult[] = [];
     for (let index = 0; index < barcodes.length; index++) {
       const barcode = barcodes[index];
-      const decoder = new TextDecoder("SHIFT-JIS");
+      const decoder = new TextDecoder(encoding);
       const text = decoder.decode(barcode.bytes);
       let result = {
         text:text
