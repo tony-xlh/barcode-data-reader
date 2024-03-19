@@ -12,8 +12,8 @@ export enum DataType {
 
 export interface ReadingResult {
   text?:string;
-  dataURL?:string;
-  blob?:string;
+  img?:HTMLImageElement;
+  blob?:Blob;
 }
 
 export interface BarcodeDetail {

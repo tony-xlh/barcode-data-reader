@@ -52,6 +52,14 @@
     <div>
       <button id="startScanBtn">Live Scan</button>
       <input type="file" id="fileInput"/><span id="status"></span>
+      <label>
+        Data type:
+        <select id="dataTypeSelect">
+          <option>Text</option>
+          <option>Image</option>
+          <option>Unknown</option>
+        </select>
+      </label>
       <div><img id="image"/></div>
       <div id="results"></div>
       <div id="cameraViewContainer">
@@ -168,7 +176,8 @@
       }
     }
 
-    function handleResult(result){
+    async function handleResult(result){
+      let dataType = document.getElementById("dataTypeSelect").selectedIndex;
       let barcodes = [];
       for (let index = 0; index < result.items.length; index++) {
         const item = result.items[index];
@@ -183,8 +192,23 @@
         }
       }
       console.log(barcodes);
-      let results = dataReader.read(barcodes,0)
+      let results = await dataReader.read(barcodes,dataType)
       console.log(results);
+      let resultsContainer = document.getElementById("results");
+      resultsContainer.innerHTML = "";
+      for (let index = 0; index < results.length; index++) {
+        if (dataType == 0) {
+          let para = document.createElement("p");
+          para.innerText = results[index].text;
+          resultsContainer.appendChild(para);
+        }else if (dataType == 1) {
+          resultsContainer.appendChild(results[index].img);
+        }else {
+          let a = document.createElement("a");
+          a.href = URL.createObjectURL(results[index].blob);
+          resultsContainer.appendChild(a);
+        }
+      }
     }
   
     async function startScanning(){

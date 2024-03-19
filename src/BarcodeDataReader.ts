@@ -2,7 +2,7 @@ import {Barcode, DataType, ReadingResult } from "./definitions";
 import chardet from 'chardet';
 
 export class BarcodeDataReader{
-  read(barcodes:Barcode[],dataType:DataType):ReadingResult[]{
+  async read(barcodes:Barcode[],dataType:DataType):Promise<ReadingResult[]>{
     if (barcodes.length == 0) {
       throw new Error("No barcodes given");
     }
@@ -17,12 +17,12 @@ export class BarcodeDataReader{
     }else if (mode == 8) {
       results = this.readKanjiBarcodes(barcodes);
     }else if (mode == 3) {
-      results = this.readStructureAppendBarcodes(barcodes,dataType);
+      results = await this.readStructureAppendBarcodes(barcodes,dataType);
     }
     return results;
   }
 
-  private readByteEncodingBarcodes(_barcodes:Barcode[]):ReadingResult[]{
+  private readByteEncodingBarcodes(_barcodes:Barcode[]):ReadingResult[]{    
     return [];
   }
 
@@ -39,7 +39,8 @@ export class BarcodeDataReader{
     return [];
   }
 
-  private readStructureAppendBarcodes(barcodes:Barcode[],dataType:DataType):ReadingResult[]{
+  private async readStructureAppendBarcodes(barcodes:Barcode[],dataType:DataType):Promise<ReadingResult[]>{
+    console.log(dataType);
     let results:ReadingResult[] = [];
     barcodes.sort((a, b) => (a.details.page ?? 0) - (b.details.page ?? 0))
     let concatedData:Uint8Array = new Uint8Array();
@@ -58,7 +59,33 @@ export class BarcodeDataReader{
         text:text
       }
       results.push(result);
+    }else if (dataType == DataType.image) {
+      const img = await this.getImageFromUint8Array(concatedData);
+      let result:ReadingResult = {
+        img:img
+      }
+      results.push(result);
+    }else{
+      let result:ReadingResult = {
+        blob:this.getBlobFromUint8Array(concatedData)
+      }
+      results.push(result);
     }
     return results;
+  }
+
+  getBlobFromUint8Array(data:Uint8Array) {
+    return new Blob([data]);
+  }
+
+  getImageFromUint8Array(data:Uint8Array):Promise<HTMLImageElement>{
+    return new Promise<HTMLImageElement>((resolve, _reject) => {
+      const img = document.createElement("img");  
+      const blob = this.getBlobFromUint8Array(data);
+      img.onload = function(){
+        resolve(img);
+      }
+      img.src = URL.createObjectURL(blob);
+    })
   }
 }
