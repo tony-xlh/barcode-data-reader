@@ -45,6 +45,10 @@
       max-width: 250px;
     }
   </style>
+  <script type="module">
+    import { BarcodeDataReader } from 'https://cdn.jsdelivr.net/npm/barcode-data-reader/dist/barcode-data-reader.js';
+    window["BarcodeDataReader"] = BarcodeDataReader;
+  </script>
 </head>
 <body>
   <div id="app">
@@ -246,6 +250,5 @@
       document.getElementById("status").innerText = msg;
     }
   </script>
-  <script type="module" src="/src/main.ts"></script>
 </body>
 </html>
