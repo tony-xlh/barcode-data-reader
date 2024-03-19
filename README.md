@@ -38,7 +38,7 @@ Via CDN:
 
 ## Usage 
 
-Sample code reading barcode results from Dynamsoft Barcode Reader.
+Sample code reading barcode results from [Dynamsoft Barcode Reader](https://www.dynamsoft.com/barcode-reader/overview/).
 
 ```js
 let result;// Dynamsoft's  Captured Result Item
