@@ -16,7 +16,7 @@ A QR code has several modes for encoding the data.
 
 PS: structured append is a mode that the data is divided into several barcodes.
 
-This library can read the data based on different modes.
+This library can read the data based on different modes. If the text encoding cannot be decided by the ECI mode, it uses [chardet](https://www.npmjs.com/package/chardet) to guess the encoding.
 
 [Online demo](https://tony-xlh.github.io/barcode-data-reader/)
 
