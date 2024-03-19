@@ -41,7 +41,7 @@ Via CDN:
 Sample code reading barcode results from [Dynamsoft Barcode Reader](https://www.dynamsoft.com/barcode-reader/overview/).
 
 ```js
-let result;// Dynamsoft's  Captured Result Item
+let result;// Dynamsoft's Captured Result Item
 let barcodes = [];
 for (let index = 0; index < result.items.length; index++) {
   const item = result.items[index];
