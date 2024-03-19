@@ -42,8 +42,18 @@ export class BarcodeDataReader{
     return [];
   }
 
-  private readKanjiBarcodes(_barcodes:Barcode[]):ReadingResult[]{
-    return [];
+  private readKanjiBarcodes(barcodes:Barcode[]):ReadingResult[]{
+    let results:ReadingResult[] = [];
+    for (let index = 0; index < barcodes.length; index++) {
+      const barcode = barcodes[index];
+      const decoder = new TextDecoder("SHIFT-JIS");
+      const text = decoder.decode(barcode.bytes);
+      let result = {
+        text:text
+      }
+      results.push(result);
+    }
+    return results;
   }
 
   private async readStructuredAppendBarcodes(barcodes:Barcode[],dataType:DataType):Promise<ReadingResult[]>{
