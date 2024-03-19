@@ -208,6 +208,8 @@
         }else {
           let a = document.createElement("a");
           a.href = URL.createObjectURL(results[index].blob);
+          a.download = "file";
+          a.innerText = "binary file";
           resultsContainer.appendChild(a);
         }
       }
