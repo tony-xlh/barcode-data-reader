@@ -30,7 +30,7 @@ npm install barcode-data-reader
 
 Via CDN:
 
-```
+```html
 <script type="module">
   import { BarcodeDataReader } from 'https://cdn.jsdelivr.net/npm/barcode-data-reader/dist/barcode-data-reader.js';
 </script>
