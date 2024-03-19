@@ -17,7 +17,7 @@ export class BarcodeDataReader{
     }else if (mode == 8) {
       results = this.readKanjiBarcodes(barcodes);
     }else if (mode == 3) {
-      results = await this.readStructureAppendBarcodes(barcodes,dataType);
+      results = await this.readStructuredAppendBarcodes(barcodes,dataType);
     }
     return results;
   }
@@ -39,7 +39,7 @@ export class BarcodeDataReader{
     return [];
   }
 
-  private async readStructureAppendBarcodes(barcodes:Barcode[],dataType:DataType):Promise<ReadingResult[]>{
+  private async readStructuredAppendBarcodes(barcodes:Barcode[],dataType:DataType):Promise<ReadingResult[]>{
     console.log(dataType);
     let results:ReadingResult[] = [];
     barcodes.sort((a, b) => (a.details.page ?? 0) - (b.details.page ?? 0))
