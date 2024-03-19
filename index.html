@@ -184,8 +184,10 @@
         console.log(item);
         if (item.type === Dynamsoft.Core.EnumCapturedResultItemType.CRIT_BARCODE) {
           console.log("is barcode")
+          let data = new Uint8Array(item.bytes.length);
+          data.set(item.bytes);
           let barcode = {
-            bytes:item.bytes,
+            bytes:data,
             details:item.details
           }
           barcodes.push(barcode);
