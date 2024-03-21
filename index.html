@@ -46,7 +46,7 @@
     }
   </style>
   <script type="module">
-    import { BarcodeDataReader } from 'https://cdn.jsdelivr.net/npm/barcode-data-reader/dist/barcode-data-reader.js';
+    import { BarcodeDataReader } from 'https://cdn.jsdelivr.net/npm/barcode-data-reader@0.2.0/dist/barcode-data-reader.js';
     window["BarcodeDataReader"] = BarcodeDataReader;
   </script>
 </head>
@@ -66,6 +66,7 @@
       </label>
       <div><img id="image"/></div>
       <div id="results"></div>
+      <div style="margin-top:2em;">You can find some sample QR codes in <a href="https://www.dynamsoft.com/codepool/python-qr-code-generator.html" target="_blank">this blog</a>.</div>
       <div id="cameraViewContainer">
         <button id="stopScanBtn">Close</button>
       </div>
@@ -152,6 +153,10 @@
         stopScanning();
       })
 
+      document.getElementById("dataTypeSelect").addEventListener("change",function(){
+        decodeImage();
+      })
+
       document.getElementById("fileInput").addEventListener("change",function(){
         let fileInput = document.getElementById("fileInput");
         let files = fileInput.files;
@@ -163,6 +168,7 @@
         fileReader.onload = function(e){
           document.getElementById("image").onload = decodeImage;
           document.getElementById("image").src = e.target.result;
+          document.getElementById("fileInput").value = ""
         };
         fileReader.onerror = function () {
           console.warn('oops, something went wrong.');
