@@ -160,6 +160,7 @@
         fileReader.onload = function(e){
           document.getElementById("image").onload = decodeImage;
           document.getElementById("image").src = e.target.result;
+          document.getElementById("fileInput").value = ""
         };
         fileReader.onerror = function () {
           console.warn('oops, something went wrong.');
