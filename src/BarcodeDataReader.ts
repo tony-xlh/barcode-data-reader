@@ -18,6 +18,8 @@ export class BarcodeDataReader{
       results = this.readKanjiBarcodes(barcodes);
     }else if (mode == 3) {
       results = await this.readStructuredAppendBarcodes(barcodes,dataType);
+    }else {
+      results = await this.readByteEncodingBarcodes(barcodes,DataType.text);
     }
     return results;
   }

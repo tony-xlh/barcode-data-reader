@@ -17,7 +17,7 @@ export interface ReadingResult {
 }
 
 export interface BarcodeDetail {
-  mode:number;
+  mode?:number;
   model?:number;
   errorCorrectionLevel?:number;
   columns?:number;
