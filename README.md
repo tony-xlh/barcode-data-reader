@@ -58,7 +58,8 @@ for (let index = 0; index < result.items.length; index++) {
 
 let reader = new BarcodeDataReader(barcodes);
 let dataType = 0; //0:text, 1:image, 2:unknown
-let readingResults = await reader.read(barcodes,dataType);
+let encoding = undefined; //pass encoding to specify the text encoding;
+let readingResults = await reader.read(barcodes,dataType,encoding);
 ```
 
 ## Interfaces
@@ -83,7 +84,7 @@ export interface Barcode {
 }
 
 export interface BarcodeDetail {
-  mode:number;
+  mode?:number;
   model?:number;
   errorCorrectionLevel?:number;
   columns?:number;
