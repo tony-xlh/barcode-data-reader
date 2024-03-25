@@ -2,7 +2,7 @@ import {Barcode, DataType, ReadingResult } from "./definitions";
 import chardet from 'chardet';
 
 export class BarcodeDataReader{
-  async read(barcodes:Barcode[],dataType:DataType):Promise<ReadingResult[]>{
+  async read(barcodes:Barcode[],dataType:DataType,encoding?:string):Promise<ReadingResult[]>{
     if (barcodes.length == 0) {
       throw new Error("No barcodes given");
     }
@@ -13,23 +13,23 @@ export class BarcodeDataReader{
     }else if (mode == 2) {
       results = this.readAlphaNumericBarcodes(barcodes);
     }else if (mode == 4) {
-      results = await this.readByteEncodingBarcodes(barcodes,dataType);
+      results = await this.readByteEncodingBarcodes(barcodes,dataType,encoding);
     }else if (mode == 8) {
       results = this.readKanjiBarcodes(barcodes);
     }else if (mode == 3) {
-      results = await this.readStructuredAppendBarcodes(barcodes,dataType);
+      results = await this.readStructuredAppendBarcodes(barcodes,dataType,encoding);
     }else {
-      results = await this.readByteEncodingBarcodes(barcodes,DataType.text);
+      results = await this.readByteEncodingBarcodes(barcodes,DataType.text,encoding);
     }
     return results;
   }
 
   
-  private async readByteEncodingBarcodes(barcodes:Barcode[],dataType:DataType):Promise<ReadingResult[]>{
+  private async readByteEncodingBarcodes(barcodes:Barcode[],dataType:DataType,encoding?:string):Promise<ReadingResult[]>{
     let results:ReadingResult[] = [];
     for (let index = 0; index < barcodes.length; index++) {
       const barcode = barcodes[index];
-      let result:ReadingResult = await this.getResultBasedOnDataType(barcode.bytes,dataType);
+      let result:ReadingResult = await this.getResultBasedOnDataType(barcode.bytes,dataType,encoding);
       results.push(result);
     }
     return results;
@@ -61,7 +61,7 @@ export class BarcodeDataReader{
     return results;
   }
 
-  private async readStructuredAppendBarcodes(barcodes:Barcode[],dataType:DataType):Promise<ReadingResult[]>{
+  private async readStructuredAppendBarcodes(barcodes:Barcode[],dataType:DataType,encoding?:string):Promise<ReadingResult[]>{
     let results:ReadingResult[] = [];
     barcodes.sort((a, b) => (a.details.page ?? 0) - (b.details.page ?? 0))
     let concatedData:Uint8Array = new Uint8Array();
@@ -72,16 +72,20 @@ export class BarcodeDataReader{
       merged.set(barcode.bytes, concatedData.length);
       concatedData = merged;
     }
-    let result = await this.getResultBasedOnDataType(concatedData,dataType);
+    let result = await this.getResultBasedOnDataType(concatedData,dataType,encoding);
     results.push(result);
     return results;
   }
 
-  async getResultBasedOnDataType(data:Uint8Array,dataType:DataType) {
+  async getResultBasedOnDataType(data:Uint8Array,dataType:DataType,encoding?:string) {
     let result:ReadingResult;
     if (dataType == DataType.text) {
-      const charset = chardet.analyse(data);
-      const decoder = new TextDecoder(charset[0].name);
+      let textEncoding = encoding;
+      if (!textEncoding) {
+        const charset = chardet.analyse(data);
+        textEncoding = charset[0].name;
+      }
+      const decoder = new TextDecoder(textEncoding);
       const text = decoder.decode(data);
       result = {
         text:text
