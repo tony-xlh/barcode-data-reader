@@ -170,6 +170,10 @@
         decodeImage();
       })
 
+      document.getElementById("encodingSelect").addEventListener("change",function(){
+        decodeImage();
+      })
+
       document.getElementById("fileInput").addEventListener("change",function(){
         let fileInput = document.getElementById("fileInput");
         let files = fileInput.files;
