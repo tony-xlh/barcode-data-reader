@@ -129,8 +129,8 @@
 
     async function init(){
       Dynamsoft.License.LicenseManager.initLicense(license);
+      await Dynamsoft.Core.CoreModule.loadWasm(["cvr", "dbr"]);
       router = await Dynamsoft.CVR.CaptureVisionRouter.createInstance();
-
       view = await Dynamsoft.DCE.CameraView.createInstance();
       cameraEnhancer = await Dynamsoft.DCE.CameraEnhancer.createInstance(view);
       document.getElementById("cameraViewContainer").append(view.getUIElement());
