@@ -57,7 +57,7 @@ for (let index = 0; index < result.items.length; index++) {
 }
 
 let reader = new BarcodeDataReader(barcodes);
-let dataType = 0; //0:text, 1:image, 2:unknown
+let dataType = 0; //0:text, 1:image, 2:svg, 3: unknown
 let encoding = undefined; //pass encoding to specify the text encoding;
 let readingResults = await reader.read(barcodes,dataType,encoding);
 ```
@@ -74,7 +74,8 @@ export interface ReadingResult {
 export enum DataType {
   text = 0,
   image = 1,
-  unknown = 2
+  SVG = 2,
+  unknown = 3
 }
 
 export interface Barcode {
