@@ -7,7 +7,8 @@ export interface Barcode {
 export enum DataType {
   text = 0,
   image = 1,
-  unknown = 2
+  svg = 2,
+  unknown = 3
 }
 
 export interface ReadingResult {

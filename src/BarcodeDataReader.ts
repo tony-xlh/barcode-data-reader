@@ -95,6 +95,13 @@ export class BarcodeDataReader{
       result = {
         img:img
       }
+    }else if (dataType == DataType.svg) {
+      const decoder = new TextDecoder();
+      const svg = decoder.decode(data);
+      const img = await this.getImageFromSVG(svg);
+      result = {
+        img:img
+      }
     }else{
       result = {
         blob:this.getBlobFromUint8Array(data)
@@ -107,9 +114,27 @@ export class BarcodeDataReader{
     return new Blob([data]);
   }
 
+  getImageFromSVG(svg:string):Promise<HTMLImageElement>{
+    return new Promise<HTMLImageElement>((resolve, reject) => {
+      let decoded = unescape(encodeURIComponent(svg));
+      // Now we can use btoa to convert the svg to base64
+      let base64 = btoa(decoded);
+      let imgSource = `data:image/svg+xml;base64,${base64}`;
+      const img = document.createElement("img");
+      img.onload = function(){
+        resolve(img);
+      }
+      img.onerror = function(error) {
+        console.error(error);
+        reject(error);
+      }
+      img.src = imgSource;
+    })
+  }
+
   getImageFromUint8Array(data:Uint8Array):Promise<HTMLImageElement>{
     return new Promise<HTMLImageElement>((resolve, reject) => {
-      const img = document.createElement("img");  
+      const img = document.createElement("img");
       const blob = this.getBlobFromUint8Array(data);
       img.onload = function(){
         resolve(img);
@@ -119,7 +144,6 @@ export class BarcodeDataReader{
         reject(error);
       }
       img.src = URL.createObjectURL(blob);
-      console.log(img.src)
     })
   }
 }
