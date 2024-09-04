@@ -1,5 +1,9 @@
 # barcode-data-reader
 
+![version](https://img.shields.io/npm/v/barcode-data-reader.svg)
+![downloads](https://img.shields.io/npm/dm/barcode-data-reader.svg)
+![jsdelivr](https://img.shields.io/jsdelivr/npm/hm/barcode-data-reader.svg)
+
 A JavaScript library to read the binary data of barcodes.
 
 Currently, it is mainly designed to work with QR codes.
